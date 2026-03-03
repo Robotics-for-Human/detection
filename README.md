@@ -72,26 +72,20 @@ Camera → Preprocess → Model → Postprocess → JSON → Robot Controller
 
 ## 📂 Project Structure
 
-```
 detection/
-│── infer_auto.py       # Auto hardware detection (recommended)
-│── infer_cpu.py        # CPU-only inference
+│── infer_auto.py        # Auto hardware detection (image inference)
+│── infer_live.py        # Real-time camera + obstacle logic
 │── models/
 │   ├── phase1_cuda/
 │   │   ├── best.pt
 │   │   └── best.engine
 │   └── phase2_generic/
 │       └── best.onnx
+│── logs/
+│   └── run_log.jsonl    # Runtime telemetry logs
 │── test.jpg
-│── output.jpg          # Generated result
-│── detections.json     # Robot-readable output
 │── requirements.txt
-
-└── README.md
-
 │── README.md
-
-```
 
 ---
 
@@ -200,6 +194,136 @@ On NVIDIA GPU (Phase-1), inference latency is significantly lower.
 * Decide deployment hardware
 * Optimize real-time robotics pipelines
 
+
+---
+---
+
+## 🎥 Real-Time Camera Mode
+
+Run live detection with obstacle decision logic:
+
+```bash
+python infer_live.py
+
+This mode:
+
+Uses auto hardware detection
+
+Runs live webcam inference
+
+Applies obstacle avoidance rules
+
+Displays action + FPS
+
+Saves runtime logs
+
+Press q to exit.
+
+
+---
+
+# ✅ 3️⃣ Add Runtime Logging Section
+
+Add this after the real-time section.
+
+```markdown
+---
+
+## 📊 Runtime Logging
+
+Each frame is saved to:
+
+
+logs/run_log.jsonl
+
+
+Each entry contains:
+
+- Timestamp
+- FPS
+- Robot action
+- Detected objects
+- Bounding boxes
+- Object center coordinates
+
+Example:
+
+```json
+{
+  "timestamp": "2026-03-03T21:10:45.123456",
+  "fps": 2.95,
+  "action": "STOP - Obstacle Too Close",
+  "detections": [
+    {
+      "label": "person",
+      "confidence": 0.91,
+      "bbox": [120, 45, 300, 410],
+      "center": [210, 227]
+    }
+  ]
+}
+
+This enables debugging, performance benchmarking, and robotics decision analysis.
+
+
+---
+
+
+# ✅ 3️⃣ Add Runtime Logging Section
+
+Add this after the real-time section.
+
+```markdown
+---
+
+## 📊 Runtime Logging
+
+Each frame is saved to:
+
+
+logs/run_log.jsonl
+
+
+Each entry contains:
+
+- Timestamp
+- FPS
+- Robot action
+- Detected objects
+- Bounding boxes
+- Object center coordinates
+
+Example:
+
+```json
+{
+  "timestamp": "2026-03-03T21:10:45.123456",
+  "fps": 2.95,
+  "action": "STOP - Obstacle Too Close",
+  "detections": [
+    {
+      "label": "person",
+      "confidence": 0.91,
+      "bbox": [120, 45, 300, 410],
+      "center": [210, 227]
+    }
+  ]
+}
+
+This enables debugging, performance benchmarking, and robotics decision analysis.
+
+
+---
+
+# 🎯 That’s All You Need
+
+Only 3 updates:
+
+1. Project structure  
+2. Real-time mode section  
+3. Runtime logging section  
+
+Bas.
 
 ---
 
@@ -345,6 +469,5 @@ Built for real-world robots, not just demos.
 
 Built for real-world robots, not just demos.
 
+
 ---
-
-
