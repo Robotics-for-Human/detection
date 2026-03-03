@@ -1,3 +1,4 @@
+
 # 🤖 Robot Detection – Hardware-Agnostic Inference (CPU/GPU/Custom Chip Ready)
 
 Lightweight, production-ready object detection pipeline built for robots.
@@ -16,6 +17,11 @@ This repo is built to be hardware-agnostic so your robot can run inference on:
 | ✅ NVIDIA GPU (CUDA) | Supported |
 | 🔜 Custom Chipset / NPU | Phase-2 |
 
+* ✅ CPU (AMD / Intel)
+* ✅ NVIDIA GPU (CUDA)
+* 🔜 Custom Chipset / NPU (Phase-2 integration)
+
+
 **One codebase. Multiple hardwares. No vendor lock-in.**
 
 ---
@@ -23,6 +29,7 @@ This repo is built to be hardware-agnostic so your robot can run inference on:
 ## 🧠 Architecture (Phase-Wise)
 
 ### Phase 1 – NVIDIA / CUDA
+
 
 | Component | Details |
 |-----------|---------|
@@ -43,6 +50,22 @@ This repo is built to be hardware-agnostic so your robot can run inference on:
 Camera → Preprocess → Model → Postprocess → JSON → Robot Controller
                         |
                   (Phase 1: CUDA / Phase 2: ONNX Runtime)
+* `best.engine` (TensorRT)
+* Ultra-fast GPU inference
+* Used for Jetson / NVIDIA-based robots
+
+### Phase 2 – Generic / Custom Chip
+
+* ONNX model (`best.onnx`)
+* CPU execution using `onnxruntime`
+* Works on Linux / Windows / AMD / Intel
+* Can be deployed on custom NPU hardware
+
+```
+Camera → Preprocess → Model → Postprocess → JSON → Robot Controller
+                         |
+                   (Phase 1: CUDA / Phase 2: ONNX Runtime)
+
 ```
 
 ---
@@ -63,7 +86,11 @@ detection/
 │── output.jpg          # Generated result
 │── detections.json     # Robot-readable output
 │── requirements.txt
+
 └── README.md
+
+│── README.md
+
 ```
 
 ---
@@ -84,11 +111,19 @@ pip install -r requirements.txt
 python infer_auto.py
 ```
 
+
 **infer_auto.py automatically:**
 
 - Uses CUDA model if GPU is available
 - Falls back to ONNX CPU model otherwise
 - Generates both visual and structured outputs
+
+`infer_auto.py` automatically:
+
+* Uses CUDA model if GPU is available
+* Falls back to ONNX CPU model otherwise
+* Generates both visual and structured outputs
+
 
 ---
 
@@ -96,12 +131,24 @@ python infer_auto.py
 
 After running inference:
 
+
 | Output | Type | Purpose |
 |--------|------|---------|
 | **output.jpg** | Image | Visualization with bounding boxes |
 | **detections.json** | JSON | Structured detection data for robot control |
 
 ### Example Output (detections.json):
+
+### 📸 output.jpg
+
+Image with bounding boxes drawn.
+
+### 📄 detections.json
+
+Structured detection output for robot control logic.
+
+Example:
+
 
 ```json
 [
@@ -123,6 +170,7 @@ During inference, speed metrics are displayed:
 
 ### Example (CPU – AMD):
 
+
 | Metric | Time |
 |--------|------|
 | Preprocess | 20 ms |
@@ -130,13 +178,28 @@ During inference, speed metrics are displayed:
 | Postprocess | 21 ms |
 | **Total** | **~330 ms per frame (~3 FPS)** |
 
+```
+Speed:
+Preprocess: 20 ms
+Inference: 288 ms
+Postprocess: 21 ms
+Total: ~330 ms per frame (~3 FPS)
+```
+
+
 On NVIDIA GPU (Phase-1), inference latency is significantly lower.
 
 **These metrics help you:**
 
+
 - Benchmark hardware performance
 - Decide deployment hardware
 - Optimize real-time robotics pipelines
+
+* Benchmark hardware performance
+* Decide deployment hardware
+* Optimize real-time robotics pipelines
+
 
 ---
 
@@ -144,11 +207,19 @@ On NVIDIA GPU (Phase-1), inference latency is significantly lower.
 
 Your robotics team only needs:
 
+
 1. **best.onnx** (Phase-2) or **best.engine** (Phase-1)
 2. **infer_auto.py**
 3. **Camera feed integration**
 
 ### Example Deployment Flow:
+
+* `best.onnx` (Phase-2) or `best.engine` (Phase-1)
+* `infer_auto.py`
+* Camera feed integration
+
+Example deployment flow:
+
 
 ```
 Robot Camera → infer_auto.py → detections.json → Motion Controller → Motors
@@ -156,7 +227,8 @@ Robot Camera → infer_auto.py → detections.json → Motion Controller → Mot
 
 ### For Embedded Systems:
 
-Replace onnxruntime backend with:
+Replace `onnxruntime` backend with:
+
 
 - Vendor NPU SDK
 - TensorRT
@@ -170,6 +242,11 @@ Replace onnxruntime backend with:
 - Postprocessing logic
 
 ---
+
+* Vendor NPU SDK
+* TensorRT
+* OpenVINO
+* Custom runtime
 
 ## 🛣️ Roadmap
 
@@ -200,17 +277,61 @@ Replace onnxruntime backend with:
 
 **Fix:**
 
+* Model format
+* Preprocessing
+* Postprocessing logic
+
+---
+
+## 🛣️ Roadmap
+
+* ✅ CPU inference (hardware-agnostic)
+* ✅ ONNX export
+* ✅ CUDA backend
+* 🔜 Real-time camera stream
+* 🔜 Obstacle-aware decision logic
+* 🔜 OpenVINO backend (Intel)
+* 🔜 Custom chipset runtime (Phase-2)
+* 🔜 ROS2 integration
+
+---
+
+## 🧠 Design Philosophy
+
+> “Model should never care about the hardware.
+> Hardware should adapt to the model.”
+
+---
+
+## 🆘 Troubleshooting
+
+### Image not found error
+
+```
+cv2.imread(...) returned None
+```
+Fix:
+
+
 ```bash
 wget https://ultralytics.com/images/zidane.jpg -O test.jpg
 ```
+---
+
+### ONNX output mismatch
+
 
 ### ONNX Output Mismatch
+
 
 **Problem:** Model outputs don't match expectations
 
 **Solution:** Ensure model was exported using:
 
 ```bash
+
+```
+
 yolo export model=best.pt format=onnx imgsz=640
 ```
 
@@ -221,3 +342,9 @@ yolo export model=best.pt format=onnx imgsz=640
 **Robotics for Human – Detection Team**
 
 Built for real-world robots, not just demos.
+
+Built for real-world robots, not just demos.
+
+---
+
+
