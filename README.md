@@ -1,6 +1,4 @@
-Perfect 👌 Nishchay, I’ve cleaned, structured, and professionalized your README so it looks like a serious production-grade robotics repo — clean formatting, no repetition, no clutter, investor-level clarity.
 
-You can directly replace your current README.md with the version below.
 
 ---
 
